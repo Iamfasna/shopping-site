@@ -4,12 +4,13 @@ const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const createError = require('http-errors');
 
 const hbs = require('express-handlebars');
 
-
+const handlebars = require('handlebars');
 // dotenv.config();
 
 const adminRouter = require('./routes/admin');
@@ -30,17 +31,34 @@ const viewEngine = hbs.create({
 app.engine('hbs', viewEngine.engine);
 app.set('view engine', 'hbs');
 
+handlebars.registerHelper('increment', function (value) {
+  return value + 1;
+});
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cookieParser());
+app.use(session({
+  secret: 'key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false, // Set to true if using HTTPS
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 1 day (adjust as needed)
+  }
+}));
+
 
 // Define Handlebars helper function to convert image data to data URI
 const Handlebars = require('handlebars');
 
-Handlebars.registerHelper('imageDataURI', function (imageUrl) {
+Handlebars.registerHelper('imageDataURI', function (imageUrl, width, height) {
   if (!imageUrl || !imageUrl.data || !imageUrl.contentType) {
     return 'No Image Available';
   }
@@ -48,7 +66,8 @@ Handlebars.registerHelper('imageDataURI', function (imageUrl) {
   const base64Image = imageUrl.data.toString('base64');
   const dataURI = `data:${imageUrl.contentType};base64,${base64Image}`;
 
-  return new Handlebars.SafeString(`<img style="width: 50px; height: 50px;" src="${dataURI}">`);
+  const imgTag = `<img src="${dataURI}" width="${width}" height="${height}">`;
+  return new Handlebars.SafeString(imgTag);
 });
 
 // Routes

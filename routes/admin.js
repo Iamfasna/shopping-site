@@ -45,7 +45,7 @@ router.post('/add-products', upload.single('image'), async (req, res) => {
   }
 });
 
-router.post('/delete', async (req, res) => {
+router.post('/delete', (req, res) => {
   const productId = req.body.productId;
   console.log('Received productId:', productId); // Log productId for debugging
 
@@ -59,7 +59,37 @@ router.post('/delete', async (req, res) => {
     });
 });
 
+router.get('/edit/:_id', async (req, res) => {
 
+  const productId = req.params._id;
+  const product = await AddProduct.findById(productId).lean();
+  res.render('admin/edit-products', { product, admin: true });
 
+});
+/* POST edit product form submission. */
+router.post('/edit/:_id', upload.single('image'), async (req, res) => {
+  const productId = req.params._id;
+  try {
+    let updatedProduct = {
+      name: req.body.name,
+      category: req.body.category,
+      price: req.body.price,
+      description: req.body.description,
+    };
+
+    if (req.file) {
+      updatedProduct.imageUrl = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+    }
+
+    await AddProduct.findByIdAndUpdate(productId, updatedProduct);
+    res.redirect('/admin/view-products');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 module.exports = router;

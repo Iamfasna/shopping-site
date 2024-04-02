@@ -13,34 +13,36 @@
           <th scope="col">Price</th>
           <th scope="col">Description</th>
           <th scope="col">Image</th>
-          <th scope="col">Delete</th>
           <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
         </tr>
       </thead>
       <tbody>
         {{#each products}} <tr>
-          <th scope="row">{{@index}}</th>
+          <th scope="row">{{increment @index}}</th>
           <td>{{this.name}}</td>
           <td>{{this.category}}</td>
           <td>{{this.price}}</td>
           <td>{{this.description}}</td>
           <td>
             {{#if imageUrl}}
-            {{{imageDataURI imageUrl}}}
+            {{{imageDataURI imageUrl 50 50}}}
             {{else}}
             No Image Available
             {{/if}}
           </td>
+
+          <td>
+            <a href="/admin/edit/{{this._id}}" class="btn btn-success" method="get">EDIT</a>
+            {{!-- <form action="/admin/edit-products/{{this._id}}" method="get">
+              <button class=" btn btn-success ml-auto" style="width: 100px;">Edit</button>
+            </form> --}}
+          </td>
+
           <td>
             <form action="/admin/delete" method="POST">
               <input type="hidden" name="productId" value="{{this._id}}">
               <button class="btn btn-danger ml-auto" style="width: 100px;">DELETE</button>
-            </form>
-          </td>
-          <td>
-            <form action="/admin/edit" method="get">
-              <input type="hidden" name="productId" value="{{this._id}}">
-              <button class="btn btn-danger ml-auto" style="width: 100px;">Edit</button>
             </form>
           </td>
         </tr>

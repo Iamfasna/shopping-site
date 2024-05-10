@@ -1,11 +1,93 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 const AddProduct = require('../connections/db');
 const multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({ storage: storage })
+const admin = require('../connections/adminlogin')
+
+// Define the signup route
+router.post('/adminsignup', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // Generate a salt and hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new admin with hashed password
+    const newAdmin = new admin({
+      name: name,
+      email: email,
+      password: hashedPassword
+    });
+
+    // Save the new admin to the database
+    await newAdmin.save();
+
+    // Assign the admin to the session
+    req.session.admin = newAdmin;
+
+    res.redirect('/view-products');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
+// Login route
+router.post('/adminlogin', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check if a user with the provided email exists
+    const foundAdmin = await admin.findOne({ email: email });
+    if (!foundAdmin) {
+      return res.redirect('/signup'); // Redirect to signup if admin not found
+    }
+
+    // Compare passwords
+    const passwordMatch = await bcrypt.compare(password, foundAdmin.password);
+
+    if (!passwordMatch) {
+      return res.render('admin/adminlogin', { alertMessage: 'Incorrect email or password.' });
+    }
+
+    // Admin authenticated, set session and cookie
+    console.log('Login successful!');
+    req.session.admin = foundAdmin;
+
+    // Optionally, set a cookie to remember the admin
+    res.cookie('admin_id', foundAdmin._id, { maxAge: 900000, httpOnly: true });
+
+    res.redirect('/view-products');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Logout route
+router.get('/logout', (req, res) => {
+  try {
+    // Destroy the session
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Error destroying session:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      // Clear any cookies
+      res.clearCookie('admin_id');
+
+      res.redirect('/');
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 /* GET products listing. */
 router.get('/view-products', async (req, res, next) => {
   try {

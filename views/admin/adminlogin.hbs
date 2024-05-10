@@ -17,7 +17,7 @@
           {{alertMessage}}
         </div>
         {{/if}}
-        <form action="/login" method="post" style="max-width: 400px;">
+        <form action="/adminlogin" method="post" style="max-width: 400px;">
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
             <input type="email" class="form-control" value="hello@gmail.com" name="email" aria-describedby="emailHelp"
@@ -28,7 +28,6 @@
             <input type="password" value="12345" class="form-control" id="exampleInputPassword1" name="password"
               placeholder="Password">
           </div>
-          <a href="/signup">Create new account?</a>
           <button type="submit" class="btn btn-primary">Login</button>
         </form>
       </div>

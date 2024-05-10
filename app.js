@@ -34,6 +34,15 @@ app.set('view engine', 'hbs');
 handlebars.registerHelper('increment', function (value) {
   return value + 1;
 });
+app.use(session({
+  secret: 'your-secret-key', // Replace with a secret key for session encryption
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 900000, // Adjust as needed
+    httpOnly: true,
+  },
+}));
 
 
 app.use(logger('dev'));

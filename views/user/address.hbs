@@ -1,0 +1,53 @@
+<section class="h-100 h-custom" style="background-color: #d2c9ff;">
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8 mb-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Billing Details</h5>
+        </div>
+        <div class="card-body">
+          <form action="/address-add" method="post">
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row mb-4">
+              <div class="col">
+                <div data-mdb-input-init class="form-outline">
+                  <input type="text" id="form7Example1" class="form-control" name="name" required="true" />
+                  <label class="form-label" for="form7Example1">Name</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Text input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input type="text" id="form7Example3" class="form-control" name="address" required="true" />
+              <label class="form-label" for="form7Example3">Address</label>
+            </div>
+
+            <!-- Text input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input type="text" id="form7Example4" class="form-control" name="state" required="true" />
+              <label class="form-label" for="form7Example4">State</label>
+            </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input type="text" id="form7Example4" class="form-control" name="district" required="true" />
+              <label class="form-label" for="form7Example4">District</label>
+            </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input type="number" id="form7Example4" class="form-control" name="pincode" required="true" />
+              <label class="form-label" for="form7Example4">Pincode</label>
+            </div>
+
+            <!-- Number input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input type="number" id="form7Example6" class="form-control" name="phone" required="true" />
+              <label class="form-label" for="form7Example6">Phone</label>
+            </div>
+
+            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
+              data-mdb-ripple-color="dark">Continue</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

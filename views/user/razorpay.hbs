@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Razorpay Payment</title>
+  <!-- Bootstrap CSS or any other styling library you prefer -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <h2>Complete your payment</h2>
+        <p>Total Amount: <!-- Display the total amount to be paid --></p>
+        <!-- Razorpay payment button -->
+        <form action="/payment-success" method="POST">
+          <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="YOUR_RAZORPAY_API_KEY"
+            data-amount="TOTAL_AMOUNT_IN_PENCE" data-currency="INR" data-name="Your Company Name"
+            data-description="Payment for Order" data-prefill.name="Customer Name"
+            data-prefill.email="customer@example.com" data-theme.color="#F37254">
+            </script>
+          <button type="submit" class="btn btn-primary">Pay Now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
